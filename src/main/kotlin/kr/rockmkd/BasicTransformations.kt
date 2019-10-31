@@ -20,7 +20,7 @@ val logger = LoggerFactory.getLogger("main")
 fun main(args: Array<String>) {
 
     // set up the streaming execution environment
-    val env = StreamExecutionEnvironment.getExecutionEnvironment()
+    val env = StreamExecutionEnvironment.getExecutionEnvironment().setParallelism(3)
 
     // use event time for the application
     env.streamTimeCharacteristic = TimeCharacteristic.EventTime
