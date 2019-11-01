@@ -4,7 +4,6 @@ import kr.rockmkd.model.SensorReading
 import kr.rockmkd.util.SensorSource
 import kr.rockmkd.util.SensorTimeAssigner
 import org.apache.flink.api.common.functions.MapFunction
-import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.java.functions.KeySelector
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.datastream.DataStream
@@ -25,16 +24,17 @@ fun main(args: Array<String>) {
     // use event time for the application
     env.streamTimeCharacteristic = TimeCharacteristic.EventTime
 
-    val typeInformation: TypeInformation<SensorReading> = TypeInformation.of(SensorReading::class.java)
     // create a DataStream<SensorReading> from a stream source
-    val sensorData: DataStream<SensorReading> = env.addSource(SensorSource(), typeInformation)
+    val sensorData: DataStream<SensorReading> = env.addSource(SensorSource())
             .assignTimestampsAndWatermarks(SensorTimeAssigner())        // assign timestamps and watermarks (required for event time)
 
     val avgTemp: DataStream<SensorReading> = sensorData
-            .map(MapFunction<SensorReading,SensorReading>{
+            .filter {
+                it.temperature > 25
+            }.map(MapFunction<SensorReading, SensorReading> {
                 val celsius = (it.temperature - 32) * (5.0 / 9.0)
                 SensorReading(it.id, it.timestamp, celsius)
-            }).keyBy(KeySelector<SensorReading,String>{
+            }).keyBy(KeySelector<SensorReading, String> {
                 it.id
             }).timeWindow(Time.seconds(5))
             .apply(TemperatureAverager())
