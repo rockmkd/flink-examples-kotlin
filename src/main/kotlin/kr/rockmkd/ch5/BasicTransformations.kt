@@ -1,4 +1,4 @@
-package kr.rockmkd
+package kr.rockmkd.ch5
 
 import kr.rockmkd.model.SensorReading
 import kr.rockmkd.util.SensorSource
