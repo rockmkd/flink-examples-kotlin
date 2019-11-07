@@ -6,7 +6,6 @@ import kr.rockmkd.util.ThresholdSource
 import kr.rockmkd.util.ThresholdUpdate
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.api.java.tuple.Tuple3
-import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
@@ -24,13 +23,13 @@ fun main() {
     val threshHold: DataStream<ThresholdUpdate> = env.addSource(ThresholdSource())
     val broadcastStateDescriptor = MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
     sensorData.connect(threshHold.broadcast(broadcastStateDescriptor))
-        .process(KeyedTemperatureAlertFunction())
-        .print()
+            .process(UpdatableTemperatureAlertFunction())
+            .print()
 
     env.execute()
 }
 
-class UpdatableTemperatureAlertFunction: BroadcastProcessFunction<SensorReading, ThresholdUpdate, Tuple3<String, Double, Double>>(){
+class UpdatableTemperatureAlertFunction : BroadcastProcessFunction<SensorReading, ThresholdUpdate, Tuple3<String, Double, Double>>() {
 
     private val logger = LoggerFactory.getLogger(javaClass)
     private val thresholdStateDescriptor = MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
@@ -38,10 +37,10 @@ class UpdatableTemperatureAlertFunction: BroadcastProcessFunction<SensorReading,
     override fun processElement(sensorReading: SensorReading, readOnlyContext: ReadOnlyContext, out: Collector<Tuple3<String, Double, Double>>) {
         val thresholds = readOnlyContext.getBroadcastState(thresholdStateDescriptor)
 
-        if( thresholds.contains(sensorReading.id)){
+        if (thresholds.contains(sensorReading.id)) {
             val sensorThreshold: Double = thresholds.get(sensorReading.id)
 
-            if ( sensorThreshold < sensorReading.temperature) {
+            if (sensorThreshold < sensorReading.temperature) {
                 out.collect(Tuple3(sensorReading.id, sensorReading.temperature, sensorThreshold))
             }
         }
