@@ -1,20 +1,24 @@
 package kr.rockmkd.util
 
-import kr.rockmkd.model.SensorReading
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import kotlin.random.Random
 
-class ThresholdSource : RichSourceFunction<Double>() {
+class ThresholdSource : RichSourceFunction<ThresholdUpdate>() {
 
     private var running: Boolean = true;
 
-    override fun run(sourceContext: SourceFunction.SourceContext<Double>) {
+    override fun run(sourceContext: SourceFunction.SourceContext<ThresholdUpdate>) {
+        val taskIdx: Int = this.runtimeContext.indexOfThisSubtask;
         while (running) {
-            sourceContext.collect(Random.nextDouble(0.0, 100.0))
+            sourceContext.collect(
+                    ThresholdUpdate(
+                            "sensor_" + ((taskIdx * 10) + Random.nextInt(1, 10)),
+                            Random.nextDouble(0.0, 5.0)
+                    )
+            )
+            Thread.sleep(Random.nextLong(2, 5) * 1000)
         }
-
-        Thread.sleep(1000)
     }
 
     override fun cancel() {
@@ -22,3 +26,5 @@ class ThresholdSource : RichSourceFunction<Double>() {
     }
 
 }
+
+data class ThresholdUpdate(val id: String, val threshold: Double)

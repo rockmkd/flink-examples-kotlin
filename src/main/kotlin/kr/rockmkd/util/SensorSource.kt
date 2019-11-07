@@ -20,9 +20,9 @@ class SensorSource : RichSourceFunction<SensorReading>() {
             sensorIds.forEachIndexed { index, id ->
                 sourceContext.collect(SensorReading(id, curTime, curFTemp[index] + Random.nextDouble(0.0,4.0)))
             }
+            Thread.sleep(100)
         }
 
-        Thread.sleep(100)
     }
 
     override fun cancel() {

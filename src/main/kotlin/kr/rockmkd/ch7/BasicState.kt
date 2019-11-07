@@ -22,8 +22,9 @@ fun main() {
 
     val sensorData: DataStream<SensorReading> = env.addSource(SensorSource())
     val keyedData: KeyedStream<SensorReading, String> = sensorData.keyBy { it.id }
-    val alert: DataStream<Tuple3<String, Double, Double>> = keyedData
-            .flatMap(TemperatureAlertFunction(1.7))
+
+    keyedData.flatMap(TemperatureAlertFunction(1.7)).print()
+    env.execute()
 }
 
 class TemperatureAlertFunction(private val threshHold: Double) : RichFlatMapFunction<SensorReading, Tuple3<String, Double, Double>>() {
