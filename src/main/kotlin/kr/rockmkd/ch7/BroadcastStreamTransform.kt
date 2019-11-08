@@ -6,6 +6,7 @@ import kr.rockmkd.util.ThresholdSource
 import kr.rockmkd.util.ThresholdUpdate
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.api.java.tuple.Tuple3
+import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
@@ -14,7 +15,7 @@ import org.apache.flink.util.Collector
 import org.slf4j.LoggerFactory
 
 fun main() {
-    val env = StreamExecutionEnvironment.getExecutionEnvironment().apply {
+    val env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(Configuration()).apply {
         parallelism = 3
         streamTimeCharacteristic = TimeCharacteristic.EventTime
     }
