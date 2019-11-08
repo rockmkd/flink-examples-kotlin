@@ -12,10 +12,10 @@ class ThresholdSource : RichSourceFunction<ThresholdUpdate>() {
         val taskIdx: Int = this.runtimeContext.indexOfThisSubtask;
         while (running) {
             sourceContext.collect(
-                    ThresholdUpdate(
-                            "sensor_" + ((taskIdx * 10) + Random.nextInt(1, 10)),
-                            Random.nextDouble(0.0, 5.0)
-                    )
+                ThresholdUpdate(
+                    "sensor_" + ((taskIdx * 10) + Random.nextInt(1, 10)),
+                    Random.nextDouble(0.0, 5.0)
+                )
             )
             Thread.sleep(Random.nextLong(2, 5) * 1000)
         }

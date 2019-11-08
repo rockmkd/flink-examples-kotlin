@@ -22,20 +22,27 @@ fun main() {
 
     val sensorData: DataStream<SensorReading> = env.addSource(SensorSource())
     val threshHold: DataStream<ThresholdUpdate> = env.addSource(ThresholdSource())
-    val broadcastStateDescriptor = MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
+    val broadcastStateDescriptor =
+        MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
     sensorData.connect(threshHold.broadcast(broadcastStateDescriptor))
-            .process(UpdatableTemperatureAlertFunction())
-            .print()
+        .process(UpdatableTemperatureAlertFunction())
+        .print()
 
     env.execute()
 }
 
-class UpdatableTemperatureAlertFunction : BroadcastProcessFunction<SensorReading, ThresholdUpdate, Tuple3<String, Double, Double>>() {
+class UpdatableTemperatureAlertFunction :
+    BroadcastProcessFunction<SensorReading, ThresholdUpdate, Tuple3<String, Double, Double>>() {
 
     private val logger = LoggerFactory.getLogger(javaClass)
-    private val thresholdStateDescriptor = MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
+    private val thresholdStateDescriptor =
+        MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
 
-    override fun processElement(sensorReading: SensorReading, readOnlyContext: ReadOnlyContext, out: Collector<Tuple3<String, Double, Double>>) {
+    override fun processElement(
+        sensorReading: SensorReading,
+        readOnlyContext: ReadOnlyContext,
+        out: Collector<Tuple3<String, Double, Double>>
+    ) {
         val thresholds = readOnlyContext.getBroadcastState(thresholdStateDescriptor)
 
         if (thresholds.contains(sensorReading.id)) {
@@ -47,7 +54,11 @@ class UpdatableTemperatureAlertFunction : BroadcastProcessFunction<SensorReading
         }
     }
 
-    override fun processBroadcastElement(update: ThresholdUpdate, context: Context, p2: Collector<Tuple3<String, Double, Double>>?) {
+    override fun processBroadcastElement(
+        update: ThresholdUpdate,
+        context: Context,
+        p2: Collector<Tuple3<String, Double, Double>>?
+    ) {
         val thresholds = context.getBroadcastState(thresholdStateDescriptor)
         if (update.threshold != 0.0) {
             thresholds.put(update.id, update.threshold)

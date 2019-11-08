@@ -27,7 +27,8 @@ fun main() {
     env.execute()
 }
 
-class TemperatureAlertFunction(private val threshHold: Double) : RichFlatMapFunction<SensorReading, Tuple3<String, Double, Double>>() {
+class TemperatureAlertFunction(private val threshHold: Double) :
+    RichFlatMapFunction<SensorReading, Tuple3<String, Double, Double>>() {
 
     private lateinit var lastTempState: ValueState<Double>
 

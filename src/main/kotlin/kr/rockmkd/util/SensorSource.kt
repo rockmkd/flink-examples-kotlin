@@ -18,7 +18,7 @@ class SensorSource : RichSourceFunction<SensorReading>() {
         while (running) {
             val curTime = System.currentTimeMillis()
             sensorIds.forEachIndexed { index, id ->
-                sourceContext.collect(SensorReading(id, curTime, curFTemp[index] + Random.nextDouble(0.0,4.0)))
+                sourceContext.collect(SensorReading(id, curTime, curFTemp[index] + Random.nextDouble(0.0, 4.0)))
             }
             Thread.sleep(100)
         }

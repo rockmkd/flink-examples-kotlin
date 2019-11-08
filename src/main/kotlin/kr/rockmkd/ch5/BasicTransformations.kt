@@ -26,18 +26,18 @@ fun main(args: Array<String>) {
 
     // create a DataStream<SensorReading> from a stream source
     val sensorData: DataStream<SensorReading> = env.addSource(SensorSource())
-            .assignTimestampsAndWatermarks(SensorTimeAssigner())        // assign timestamps and watermarks (required for event time)
+        .assignTimestampsAndWatermarks(SensorTimeAssigner())        // assign timestamps and watermarks (required for event time)
 
     val avgTemp: DataStream<SensorReading> = sensorData
-            .filter {
-                it.temperature > 25
-            }.map(MapFunction<SensorReading, SensorReading> {
-                val celsius = (it.temperature - 32) * (5.0 / 9.0)
-                SensorReading(it.id, it.timestamp, celsius)
-            }).keyBy(KeySelector<SensorReading, String> {
-                it.id
-            }).timeWindow(Time.seconds(5))
-            .apply(TemperatureAverager())
+        .filter {
+            it.temperature > 25
+        }.map(MapFunction<SensorReading, SensorReading> {
+            val celsius = (it.temperature - 32) * (5.0 / 9.0)
+            SensorReading(it.id, it.timestamp, celsius)
+        }).keyBy(KeySelector<SensorReading, String> {
+            it.id
+        }).timeWindow(Time.seconds(5))
+        .apply(TemperatureAverager())
     avgTemp.print()
     env.execute()
 
@@ -52,7 +52,12 @@ class TemperatureAverager : WindowFunction<SensorReading, SensorReading, String,
      * @param input an iterable over the collected sensor readings that were assigned to the window
      * @param out a collector to emit results from the function
      */
-    override fun apply(sensorId: String, window: TimeWindow, input: MutableIterable<SensorReading>, out: Collector<SensorReading>) {
+    override fun apply(
+        sensorId: String,
+        window: TimeWindow,
+        input: MutableIterable<SensorReading>,
+        out: Collector<SensorReading>
+    ) {
         var cnt = 0
         var sum = 0.0
         for (r in input) {

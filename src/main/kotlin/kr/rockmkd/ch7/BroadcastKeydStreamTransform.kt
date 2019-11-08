@@ -27,34 +27,41 @@ fun main() {
 
     val sensorData: DataStream<SensorReading> = env.addSource(SensorSource())
     val threshHold: DataStream<ThresholdUpdate> = env.addSource(ThresholdSource())
-    val broadcastStateDescriptor = MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
+    val broadcastStateDescriptor =
+        MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
     sensorData
-            .keyBy(KeySelector<SensorReading, String>{it.id})
-            .connect(threshHold.broadcast(broadcastStateDescriptor))
-            .process(KeyedTemperatureAlertFunction())
-            .print()
+        .keyBy(KeySelector<SensorReading, String> { it.id })
+        .connect(threshHold.broadcast(broadcastStateDescriptor))
+        .process(KeyedTemperatureAlertFunction())
+        .print()
 
     env.execute()
 }
 
-class KeyedTemperatureAlertFunction : KeyedBroadcastProcessFunction<String, SensorReading, ThresholdUpdate, Tuple3<String, Double, Double>>() {
+class KeyedTemperatureAlertFunction :
+    KeyedBroadcastProcessFunction<String, SensorReading, ThresholdUpdate, Tuple3<String, Double, Double>>() {
 
     private lateinit var lastTemperature: ValueState<Double>
 
     private val logger = LoggerFactory.getLogger(javaClass)
-    private val thresholdStateDescriptor = MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
+    private val thresholdStateDescriptor =
+        MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
 
     override fun open(parameters: Configuration) {
         val valueStateDescriptor = ValueStateDescriptor<Double>("lastTemp", Double::class.java)
         lastTemperature = runtimeContext.getState(valueStateDescriptor)
     }
 
-    override fun processElement(sensorReading: SensorReading, readOnlyContext: ReadOnlyContext, out: Collector<Tuple3<String, Double, Double>>) {
+    override fun processElement(
+        sensorReading: SensorReading,
+        readOnlyContext: ReadOnlyContext,
+        out: Collector<Tuple3<String, Double, Double>>
+    ) {
         val thresholds = readOnlyContext.getBroadcastState(thresholdStateDescriptor)
 
         if (thresholds.contains(sensorReading.id)) {
             val sensorThreshold = thresholds.get(sensorReading.id)
-            lastTemperature.value()?.let{
+            lastTemperature.value()?.let {
                 val tempDiff = (sensorReading.temperature - it).absoluteValue
                 if (tempDiff > sensorThreshold) {
                     lastTemperature.update(it)
@@ -65,7 +72,11 @@ class KeyedTemperatureAlertFunction : KeyedBroadcastProcessFunction<String, Sens
         lastTemperature.update(sensorReading.temperature)
     }
 
-    override fun processBroadcastElement(update: ThresholdUpdate, context: Context, p2: Collector<Tuple3<String, Double, Double>>?) {
+    override fun processBroadcastElement(
+        update: ThresholdUpdate,
+        context: Context,
+        p2: Collector<Tuple3<String, Double, Double>>?
+    ) {
         val thresholds = context.getBroadcastState(thresholdStateDescriptor)
         if (update.threshold != 0.0) {
             thresholds.put(update.id, update.threshold)
