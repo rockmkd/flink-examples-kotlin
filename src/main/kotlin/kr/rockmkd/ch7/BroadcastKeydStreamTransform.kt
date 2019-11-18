@@ -75,7 +75,7 @@ class KeyedTemperatureAlertFunction :
     override fun processBroadcastElement(
         update: ThresholdUpdate,
         context: Context,
-        p2: Collector<Tuple3<String, Double, Double>>?
+        collector: Collector<Tuple3<String, Double, Double>>
     ) {
         val thresholds = context.getBroadcastState(thresholdStateDescriptor)
         if (update.threshold != 0.0) {
