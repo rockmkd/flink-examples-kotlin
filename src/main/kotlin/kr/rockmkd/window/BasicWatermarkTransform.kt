@@ -21,7 +21,6 @@ fun main() {
 
     val broadcastStateDescriptor =
         MapStateDescriptor<String, Double>("threshold", String::class.java, Double::class.java)
-
     env.fromCollection(temperatureData)
         .assignTimestampsAndWatermarks(object: AssignerWithPeriodicWatermarks<SimpleSensor>{
             override fun getCurrentWatermark() = Watermark(1000)

@@ -1,7 +1,7 @@
 package kr.rockmkd.ch7
 
 import kr.rockmkd.model.SensorReading
-import kr.rockmkd.util.SensorSource
+import kr.rockmkd.util.sources.SensorSource
 import kr.rockmkd.util.ThresholdSource
 import kr.rockmkd.util.ThresholdUpdate
 import org.apache.flink.api.common.state.MapStateDescriptor
@@ -13,7 +13,6 @@ import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
-import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction
 import org.apache.flink.streaming.api.functions.co.KeyedBroadcastProcessFunction
 import org.apache.flink.util.Collector
 import org.slf4j.LoggerFactory

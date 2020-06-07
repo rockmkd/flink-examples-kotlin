@@ -1,7 +1,7 @@
 package kr.rockmkd.ch7
 
 import kr.rockmkd.model.SensorReading
-import kr.rockmkd.util.SensorSource
+import kr.rockmkd.util.sources.SensorSource
 import kr.rockmkd.util.ThresholdSource
 import kr.rockmkd.util.ThresholdUpdate
 import org.apache.flink.api.common.state.MapStateDescriptor

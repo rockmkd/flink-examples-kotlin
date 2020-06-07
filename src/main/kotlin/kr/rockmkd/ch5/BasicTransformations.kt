@@ -1,7 +1,7 @@
 package kr.rockmkd.ch5
 
 import kr.rockmkd.model.SensorReading
-import kr.rockmkd.util.SensorSource
+import kr.rockmkd.util.sources.SensorSource
 import kr.rockmkd.util.SensorTimeAssigner
 import org.apache.flink.api.common.functions.MapFunction
 import org.apache.flink.api.java.functions.KeySelector

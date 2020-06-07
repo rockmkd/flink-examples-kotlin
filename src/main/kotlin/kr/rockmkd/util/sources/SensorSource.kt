@@ -1,4 +1,4 @@
-package kr.rockmkd.util
+package kr.rockmkd.util.sources
 
 import kr.rockmkd.model.SensorReading
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction
