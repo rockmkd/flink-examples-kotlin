@@ -1,6 +1,6 @@
-package kr.rockmkd.util.sources
+package kr.rockmkd.common.sources
 
-import kr.rockmkd.model.SensorReading
+import kr.rockmkd.common.model.SensorReading
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import kotlin.random.Random

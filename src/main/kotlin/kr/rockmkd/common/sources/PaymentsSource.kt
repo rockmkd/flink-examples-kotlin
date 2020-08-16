@@ -1,5 +1,6 @@
-package kr.rockmkd.util.sources
+package kr.rockmkd.common.sources
 
+import kr.rockmkd.common.model.UserPayment
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import java.time.LocalDateTime
@@ -27,9 +28,3 @@ class PaymentsSource : RichSourceFunction<UserPayment>() {
   }
 
 }
-
-data class UserPayment(
-  val userId: String,
-  val cash: Int,
-  val occurrenceDateTime: LocalDateTime
-)

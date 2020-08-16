@@ -1,7 +1,7 @@
 package kr.rockmkd.ch7
 
-import kr.rockmkd.model.SensorReading
-import kr.rockmkd.util.sources.SensorSource
+import kr.rockmkd.common.model.SensorReading
+import kr.rockmkd.common.sources.SensorSource
 import org.apache.flink.api.common.functions.RichFlatMapFunction
 import org.apache.flink.api.common.state.ValueState
 import org.apache.flink.api.common.state.ValueStateDescriptor

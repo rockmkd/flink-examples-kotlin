@@ -1,4 +1,4 @@
-package kr.rockmkd.util
+package kr.rockmkd.common.sources
 
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction
 import org.apache.flink.streaming.api.functions.source.SourceFunction

@@ -1,8 +1,8 @@
 package kr.rockmkd.ch5
 
-import kr.rockmkd.model.SensorReading
-import kr.rockmkd.util.sources.SensorSource
-import kr.rockmkd.util.SensorTimeAssigner
+import kr.rockmkd.common.model.SensorReading
+import kr.rockmkd.common.sources.SensorSource
+import kr.rockmkd.common.util.SensorTimeAssigner
 import org.apache.flink.api.common.functions.MapFunction
 import org.apache.flink.api.java.functions.KeySelector
 import org.apache.flink.streaming.api.TimeCharacteristic

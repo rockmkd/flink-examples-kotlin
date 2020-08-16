@@ -1,8 +1,8 @@
 package kr.rockmkd.window
 
-import kr.rockmkd.util.sources.EnvironmentFactory
-import kr.rockmkd.util.sources.PaymentsSource
-import kr.rockmkd.util.sources.UserPayment
+import kr.rockmkd.common.EnvironmentFactory
+import kr.rockmkd.common.sources.PaymentsSource
+import kr.rockmkd.common.model.UserPayment
 import org.apache.flink.api.common.functions.ReduceFunction
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
 import org.apache.flink.streaming.api.watermark.Watermark
@@ -11,9 +11,7 @@ import org.apache.flink.streaming.api.windowing.time.Time
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import kotlin.math.max
-import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction
-import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
 

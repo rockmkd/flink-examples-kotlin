@@ -29,10 +29,11 @@ under the License.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flink.version>1.9.1</flink.version>
-        <kotlin.version>1.3.50</kotlin.version>
+        <flink.version>1.11.1</flink.version>
+        <kotlin.version>1.3.70</kotlin.version>
         <scala.binary.version>2.12</scala.binary.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <junit.version>5.1.0</junit.version>
     </properties>
 
     <dependencies>
@@ -100,6 +101,13 @@ under the License.
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
 <!--            <scope>runtime</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

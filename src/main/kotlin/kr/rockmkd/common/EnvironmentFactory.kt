@@ -1,4 +1,4 @@
-package kr.rockmkd.util.sources
+package kr.rockmkd.common
 
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment

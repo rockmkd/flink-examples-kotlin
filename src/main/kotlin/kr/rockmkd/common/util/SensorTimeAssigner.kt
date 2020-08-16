@@ -1,6 +1,6 @@
-package kr.rockmkd.util
+package kr.rockmkd.common.util
 
-import kr.rockmkd.model.SensorReading
+import kr.rockmkd.common.model.SensorReading
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor
 import org.apache.flink.streaming.api.windowing.time.Time
 

@@ -1,9 +1,9 @@
 package kr.rockmkd.ch7
 
-import kr.rockmkd.model.SensorReading
-import kr.rockmkd.util.sources.SensorSource
-import kr.rockmkd.util.ThresholdSource
-import kr.rockmkd.util.ThresholdUpdate
+import kr.rockmkd.common.model.SensorReading
+import kr.rockmkd.common.sources.SensorSource
+import kr.rockmkd.common.sources.ThresholdSource
+import kr.rockmkd.common.sources.ThresholdUpdate
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.api.common.state.ValueState
 import org.apache.flink.api.common.state.ValueStateDescriptor
@@ -25,7 +25,9 @@ fun main() {
     }
 
     val sensorData: DataStream<SensorReading> = env.addSource(SensorSource())
-    val threshHold: DataStream<ThresholdUpdate> = env.addSource(ThresholdSource())
+    val threshHold: DataStream<ThresholdUpdate> = env.addSource(
+        ThresholdSource()
+    )
     val broadcastStateDescriptor =
         MapStateDescriptor<String, Double>("thresholds", String::class.java, Double::class.java)
     sensorData

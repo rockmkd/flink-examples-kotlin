@@ -1,4 +1,4 @@
-package kr.rockmkd.model
+package kr.rockmkd.common.model
 
 data class SensorReading(
     val id: String,
