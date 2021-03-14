@@ -7,6 +7,8 @@ import kr.rockmkd.common.sources.builder.CardTxElementBuilder
 import kr.rockmkd.common.sources.builder.DepositTxElementBuilder
 import kr.rockmkd.common.util.toTimestamp
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
+import org.apache.flink.api.common.eventtime.WatermarkStrategy.forMonotonousTimestamps
+import org.apache.flink.api.common.eventtime.WatermarkStrategy.noWatermarks
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
@@ -18,8 +20,8 @@ object StreamFactory {
       TransactionSource<DepositTransaction>(1, DepositTxElementBuilder()),
       TypeInformation.of(DepositTransaction::class.java)
     ).assignTimestampsAndWatermarks(
-      WatermarkStrategy.forMonotonousTimestamps<DepositTransaction>()
-        .withTimestampAssigner { event, _ -> event.dateTime.toTimestamp() }
+      noWatermarks<DepositTransaction>()
+        .withTimestampAssigner { event, _ -> event.dateTime.toTimestamp().apply{ println(this) }}
     )
 
   fun defaultCardTransaction(env: StreamExecutionEnvironment): SingleOutputStreamOperator<CardTransaction> =
@@ -27,7 +29,7 @@ object StreamFactory {
       TransactionSource<CardTransaction>(1, CardTxElementBuilder()),
       TypeInformation.of(CardTransaction::class.java)
     ).assignTimestampsAndWatermarks(
-      WatermarkStrategy.forMonotonousTimestamps<CardTransaction>()
-        .withTimestampAssigner { event, _ -> event.dateTime.toTimestamp() }
+      noWatermarks<CardTransaction>()
+        .withTimestampAssigner { event, _ -> event.dateTime.toTimestamp().apply{ println(this) } }
     )
 }
