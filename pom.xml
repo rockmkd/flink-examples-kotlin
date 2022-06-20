@@ -30,7 +30,7 @@ under the License.
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flink.version>1.11.1</flink.version>
-        <kotlin.version>1.4.31</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
         <scala.binary.version>2.12</scala.binary.version>
 <!--        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>-->
         <junit.version>5.1.0</junit.version>
